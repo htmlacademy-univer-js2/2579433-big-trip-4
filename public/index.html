@@ -1,42 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
-    />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link rel="stylesheet" href="./css/style.css" />
-    <title>TASKMANAGER</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Big Trip</title>
+
+    <link rel="stylesheet" href="./css/style.css">
   </head>
 
-  <body>
-    <div style="display: none">
-      <svg>
-        <symbol
-          id="wave"
-          viewBox="0 0 159 10"
-          preserveAspectRatio="none"
-        >
-          <g
-            fill="none"
-            fill-rule="nonzero"
-            stroke-linecap="square"
-            stroke-width="5"
-          >
-            <path
-              d="M4 4l9.257 2.463L21.367 4l7.927 2.463L38.736 4l9.117 2.463L56.103 4l8.685 2.463L73.472 4l8.684 2.463L90.84 4l8.684 2.463L108.208 4l8.684 2.463L125.576 4l8.684 2.463L142.943 4M146.423 4l9.257 2.463"
-            />
-          </g>
-        </symbol>
-      </svg>
-    </div>
+  <body class="page-body">
+    <header class="page-header">
+      <div class="page-body__container  page-header__container">
+        <img class="page-header__logo" src="img/logo.png" width="42" height="42" alt="Trip logo">
 
-    <main class="main">
-      <section class="main__control control container">
-        <h1 class="control__title">TASKMANAGER</h1>
-      </section>
+        <div class="trip-main">
+          <div class="trip-main__trip-controls  trip-controls">
+            <div class="trip-controls__filters">
+              <h2 class="visually-hidden">Filter events</h2>
+              <!-- Фильтры -->
+            </div>
+          </div>
+
+          <button class="trip-main__event-add-btn  btn  btn--big  btn--yellow" type="button">New event</button>
+        </div>
+      </div>
+    </header>
+    <main class="page-body__page-main  page-main">
+      <div class="page-body__container">
+          <section class="trip-events">
+            <h2 class="visually-hidden">Trip events</h2>
+
+            <!-- Сортировка -->
+
+            <!-- Контент -->
+          </section>
+      </div>
     </main>
   </body>
 </html>

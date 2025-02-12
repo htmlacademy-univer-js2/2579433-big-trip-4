@@ -1,13 +1,12 @@
-import NewTaskButtonView from './view/new-task-button-view.js';
 import FilterView from './view/filter-view.js';
+import SortView from './view/sort-view.js';
 import {render} from './render.js';
-import BoardPresenter from './presenter/board-presenter.js';
+import RoutePresenter from './presenter/route-presenter.js';
 
-const siteMainElement = document.querySelector('.main');
-const siteHeaderElement = siteMainElement.querySelector('.main__control');
-const boardPresenter = new BoardPresenter({boardContainer: siteMainElement});
+const siteListElement = document.querySelector('.trip-events');
+const siteFilterElement = document.querySelector('.trip-controls__filters');
+render(new FilterView(), siteFilterElement);
+render(new SortView(), siteListElement);
 
-render(new NewTaskButtonView(), siteHeaderElement);
-render(new FilterView(), siteMainElement);
-
-boardPresenter.init();
+const routePresenter = new RoutePresenter({listContainer: siteListElement});
+routePresenter.init();
