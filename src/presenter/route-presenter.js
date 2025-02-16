@@ -2,6 +2,7 @@ import PointListView from '../view/point-list-view.js';
 import PointView from '../view/point-view.js';
 import PointCreationView from '../view/point-create-view.js';
 import PointEditView from '../view/point-edit-view.js';
+import SortView from '../view/sort-view.js';
 import {render} from '../render.js';
 
 export default class RoutePresenter {
@@ -12,6 +13,7 @@ export default class RoutePresenter {
   }
 
   init() {
+    render(new SortView(), this.listContainer);
     render(this.listComponent, this.listContainer);
     render(new PointEditView(), this.listComponent.getElement());
     render(new PointCreationView(), this.listComponent.getElement());
