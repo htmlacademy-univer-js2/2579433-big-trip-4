@@ -1,26 +1,26 @@
 import { createElement } from '../render.js';
 import { getRandomPoint } from '../mock/point.js';
-import { TYPES, OFFERS } from '../consts.js';
+import { TYPES } from '../consts.js';
 import { humanizeDate } from '../utils.js';
 import { offers } from '../mock/offer.js';
 
 
 function createPointEditTemplate(point) {
-const { type, destination, eventStart, eventEnd, price, offersID } = point;
+  const { type, destination, eventStart, eventEnd, price, offersID } = point;
 
-const typeList = TYPES.map(eventType =>
-  `<div class="event__type-item">
-    <input id="event-type-${eventType.toLowerCase()}-1" class="event__type-input visually-hidden" type="radio" name="event-type" value="${eventType.toLowerCase()}" ${eventType.toLowerCase() === type ? 'checked' : ''}>
+  const typeList = TYPES.map((eventType) =>
+    `<div class="event__type-item">
+      <input id="event-type-${eventType.toLowerCase()}-1" class="event__type-input visually-hidden" type="radio" name="event-type" value="${eventType.toLowerCase()}" ${eventType.toLowerCase() === type ? 'checked' : ''}>
       <label class="event__type-label event__type-label--${eventType}" for="event-type-${eventType}-1">${eventType.charAt(0).toUpperCase() + eventType.slice(1)}</label>
-  </div>`).join('\n');
+    </div>`).join('\n');
 
-const offerList = offers.map((offer) => `
-<div class="event__offer-selector">
-  <input class="event__offer-checkbox visually-hidden" id="event-offer-${offer.type.toLowerCase()}" type="checkbox" name="event-offer-${offer.type.toLowerCase()}" ${offersID.includes(offer.id) ? 'checked' : ''}>
-  <label class="event__offer-label" for="event-offer-${offer.type.toLowerCase()}-1">
-    <span class="event__offer-title">${offer.type.toUpperCase()}</span>
-    &plus;&euro;&nbsp;<span class="event__offer-price">${offer.price}</span>
-  </label>
+  const offerList = offers.map((offer) =>
+    `<div class="event__offer-selector">
+      <input class="event__offer-checkbox visually-hidden" id="event-offer-${offer.type.toLowerCase()}" type="checkbox" name="event-offer-${offer.type.toLowerCase()}" ${offersID.includes(offer.id) ? 'checked' : ''}>
+      <label class="event__offer-label" for="event-offer-${offer.type.toLowerCase()}-1">
+      <span class="event__offer-title">${offer.type.toUpperCase()}</span>
+      &plus;&euro;&nbsp;<span class="event__offer-price">${offer.price}</span>
+      </label>
 </div>`).join('\n');
 
   return (
