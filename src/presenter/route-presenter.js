@@ -8,18 +8,20 @@ import {render} from '../render.js';
 export default class RoutePresenter {
   listComponent = new PointListView();
 
-  constructor({listContainer}) {
+  constructor({listContainer, pointModel}) {
     this.listContainer = listContainer;
+    this.pointModel = pointModel;
   }
 
   init() {
+    this.wayPoints = [...this.pointModel.getPoints()];
     render(new SortView(), this.listContainer);
     render(this.listComponent, this.listContainer);
     render(new PointEditView(), this.listComponent.getElement());
     render(new PointCreationView(), this.listComponent.getElement());
 
-    for (let i = 0; i < 3; i++) {
-      render(new PointView(), this.listComponent.getElement());
+    for (let i = 0; i < this.wayPoints.length; i++) {
+      render(new PointView({point: this.wayPoints[i]}), this.listComponent.getElement());
     }
   }
 }

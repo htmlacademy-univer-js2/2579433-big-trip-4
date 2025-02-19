@@ -1,4 +1,7 @@
-import { CITIES, OFFERS, SENTENSES, STUB } from './consts';
+import dayjs from 'dayjs';
+
+const DATE_FORMAT = 'DD/MM/YY HH:mm';
+const SHORT_DATE_FORMAT = 'MMM DD';
 
 function getRandomArrayElement(items) {
   return items[Math.floor(Math.random() * items.length)];
@@ -8,44 +11,35 @@ function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
 
-function getRandomDate(start){
-  return new Date(start.getTime() + Math.random() * 1000 * 60 * 60 * 24 * 30);
+function getRandomDate(start, mult){
+  return new Date(start.getTime() + (Math.random() + mult) * 1000 * 60 * 60 * 24 * 30);
 }
 
-function getRandomText(count){
-  const text = getRandomArrayElement(SENTENSES);
-  for(let i = 0; i < count; i++){
-    text.concat(' ', getRandomArrayElement(SENTENSES));
+function humanizeDate(date){
+  return date ? dayjs(date).format(DATE_FORMAT) : '';
+}
+
+function getShortDate(date){
+  return date ? dayjs(date).format(SHORT_DATE_FORMAT) : '';
+}
+
+function humanizeDuration(start, end){
+  const diffMs = dayjs(end).diff(dayjs(start));
+
+  const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const mins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+
+  const formatted = [];
+  if(days > 0){
+    formatted.push(`${String(days).padStart(2, '0')}D`);
   }
-  return text;
-}
-
-function getOffers(count){
-  const offers = [];
-  for(let i = 0; i < count; i++){
-    const offer = {
-      type: getRandomArrayElement(OFFERS),
-      price: getRandomInt(100)
-    };
-    offers.push(offer);
+  if(hours > 0 || days > 0){
+    formatted.push(`${String(hours).padStart(2, '0')}H`);
   }
-  return offers;
+  formatted.push(`${String(mins).padStart(2, '0')}M`);
+
+  return formatted.join(' ');
 }
 
-function getPhotoes(count){
-  const photoes = [];
-  for(let i = 0; i < count; i++){
-    photoes.push(STUB + getRandomInt(10000));
-  }
-  return photoes;
-}
-
-function getDestination(){
-  return {
-    description: getRandomText(getRandomInt(SENTENSES.length)),
-    city: getRandomArrayElement(CITIES),
-    photoes: getPhotoes(getRandomInt(10))
-  };
-}
-
-export {getRandomArrayElement, getRandomInt, getRandomDate, getOffers, getDestination};
+export {getRandomArrayElement, getRandomInt, getRandomDate, getShortDate, humanizeDate, humanizeDuration};
