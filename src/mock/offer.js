@@ -1,12 +1,15 @@
 import { getRandomInt } from '../utils';
-import { OFFERS } from '../consts';
+import { OFFERS, TYPES } from '../consts';
 
-function getOffers(count){
-  return OFFERS.slice(0, count).map((type, index) => ({
-    id: index,
+function getOffers(){
+  return TYPES.map((type) => ({
     type: type,
-    price:getRandomInt(100)
+    offers: OFFERS.map((title, index) => ({
+      id: index,
+      title: title,
+      price: getRandomInt(1000)
+    }))
   }));
 }
 
-export const offers = getOffers(OFFERS.length);
+export const offerArray = getOffers();

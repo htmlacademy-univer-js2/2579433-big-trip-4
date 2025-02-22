@@ -1,8 +1,5 @@
 import dayjs from 'dayjs';
 
-const DATE_FORMAT = 'DD/MM/YY HH:mm';
-const SHORT_DATE_FORMAT = 'MMM DD';
-
 function getRandomArrayElement(items) {
   return items[Math.floor(Math.random() * items.length)];
 }
@@ -15,12 +12,8 @@ function getRandomDate(start, mult){
   return new Date(start.getTime() + (Math.random() + mult) * 1000 * 60 * 60 * 24 * 30);
 }
 
-function humanizeDate(date){
-  return date ? dayjs(date).format(DATE_FORMAT) : '';
-}
-
-function getShortDate(date){
-  return date ? dayjs(date).format(SHORT_DATE_FORMAT) : '';
+function humanizeDate(date, format){
+  return date ? dayjs(date).format(format) : '';
 }
 
 function humanizeDuration(start, end){
@@ -42,4 +35,4 @@ function humanizeDuration(start, end){
   return formatted.join(' ');
 }
 
-export {getRandomArrayElement, getRandomInt, getRandomDate, getShortDate, humanizeDate, humanizeDuration};
+export {getRandomArrayElement, getRandomInt, getRandomDate, humanizeDate, humanizeDuration};

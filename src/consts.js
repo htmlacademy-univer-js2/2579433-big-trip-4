@@ -8,4 +8,10 @@ const SENTENSES = ['Lorem ipsum dolor sit amet, consectetur adipiscing elit.', '
 
 const STUB = 'https://loremflickr.com/248/152?random=';
 
-export {TYPES, CITIES, OFFERS, SENTENSES, STUB};
+const FORMATS = {
+  fullDate: 'DD/MM/YY HH:mm',
+  shortDate: 'MMM DD',
+  timeOnly: 'HH:mm'
+};
+
+export {TYPES, CITIES, OFFERS, SENTENSES, STUB, FORMATS};
