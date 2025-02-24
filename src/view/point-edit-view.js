@@ -1,4 +1,3 @@
-import { getRandomPoint } from '../mock/point.js';
 import { TYPES, FORMATS } from '../consts.js';
 import { humanizeDate } from '../utils.js';
 import { offerArray } from '../mock/offer.js';
@@ -99,9 +98,14 @@ function createPointEditTemplate(point) {
 
 
 export default class PointEditView extends AbstractView{
-  constructor(point = getRandomPoint()) {
+  constructor({ point, onSubmit, onClick }) {
     super();
     this.point = point;
+    this.onSubmit = onSubmit;
+    this.onClick = onClick;
+
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.onClick);
+    this.element.querySelector('form').addEventListener('submit', this.onSubmit);
   }
 
   get template() {

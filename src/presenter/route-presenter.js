@@ -1,9 +1,8 @@
 import PointListView from '../view/point-list-view.js';
 import PointView from '../view/point-view.js';
-import PointCreationView from '../view/point-create-view.js';
 import PointEditView from '../view/point-edit-view.js';
 import SortView from '../view/sort-view.js';
-import {render} from '../render.js';
+import {render, replace} from '../framework/render.js';
 
 export default class RoutePresenter {
   listComponent = new PointListView();
@@ -13,15 +12,44 @@ export default class RoutePresenter {
     this.pointModel = pointModel;
   }
 
+  replaceFormToPoint(formComponent, pointComponent){
+    replace(pointComponent, formComponent);
+  }
+
+  replacePointToForm(pointComponent){
+    const point = pointComponent.point;
+    const editComponent = new PointEditView({
+      point,
+      onSubmit: () => this.replaceFormToPoint(editComponent, pointComponent),
+      onClick: () => this.replaceFormToPoint(editComponent, pointComponent)
+    });
+
+    replace(editComponent, pointComponent);
+
+    const onEscDown = (evt) => {
+      if(evt.key === 'Escape'){
+        this.replaceFormToPoint(editComponent, pointComponent);
+        document.removeEventListener('keydown', onEscDown);
+      }
+    };
+
+    document.addEventListener('keydown', onEscDown);
+  }
+
+  renderPoint(point){
+    const pointComponent = new PointView({
+      point,
+      onClick: () => this.replacePointToForm(pointComponent)
+    });
+
+    render(pointComponent, this.listComponent.element);
+  }
+
   init() {
     this.wayPoints = [...this.pointModel.getPoints()];
     render(new SortView(), this.listContainer);
     render(this.listComponent, this.listContainer);
-    render(new PointEditView(), this.listComponent.element);
-    render(new PointCreationView(), this.listComponent.element);
 
-    for (let i = 0; i < this.wayPoints.length; i++) {
-      render(new PointView({point: this.wayPoints[i]}), this.listComponent.element);
-    }
+    this.wayPoints.forEach((point) => this.renderPoint(point));
   }
 }
