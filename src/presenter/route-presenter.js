@@ -17,11 +17,11 @@ export default class RoutePresenter {
     this.wayPoints = [...this.pointModel.getPoints()];
     render(new SortView(), this.listContainer);
     render(this.listComponent, this.listContainer);
-    render(new PointEditView(), this.listComponent.getElement());
-    render(new PointCreationView(), this.listComponent.getElement());
+    render(new PointEditView(), this.listComponent.element);
+    render(new PointCreationView(), this.listComponent.element);
 
     for (let i = 0; i < this.wayPoints.length; i++) {
-      render(new PointView({point: this.wayPoints[i]}), this.listComponent.getElement());
+      render(new PointView({point: this.wayPoints[i]}), this.listComponent.element);
     }
   }
 }

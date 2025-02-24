@@ -1,9 +1,9 @@
-import { createElement } from '../render.js';
 import { getRandomPoint } from '../mock/point.js';
 import { TYPES, FORMATS } from '../consts.js';
 import { humanizeDate } from '../utils.js';
 import { offerArray } from '../mock/offer.js';
 import { destinations } from '../mock/destination.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
 
 function createPointEditTemplate(point) {
@@ -98,27 +98,13 @@ function createPointEditTemplate(point) {
 }
 
 
-export default class PointEditView {
+export default class PointEditView extends AbstractView{
   constructor(point = getRandomPoint()) {
+    super();
     this.point = point;
-    this.element = null;
   }
 
-
-  getTemplate() {
+  get template() {
     return createPointEditTemplate(this.point);
-  }
-
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-    return this.element;
-  }
-
-
-  removeElement() {
-    this.element = null;
   }
 }
