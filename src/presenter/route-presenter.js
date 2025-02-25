@@ -12,23 +12,23 @@ export default class RoutePresenter {
     this.pointModel = pointModel;
   }
 
-  replaceFormToPoint(formComponent, pointComponent){
+  #replaceFormToPoint(formComponent, pointComponent){
     replace(pointComponent, formComponent);
   }
 
-  replacePointToForm(pointComponent){
+  #replacePointToForm(pointComponent){
     const point = pointComponent.point;
     const editComponent = new PointEditView({
       point,
-      onSubmit: () => this.replaceFormToPoint(editComponent, pointComponent),
-      onClick: () => this.replaceFormToPoint(editComponent, pointComponent)
+      onSubmit: () => this.#replaceFormToPoint(editComponent, pointComponent),
+      onClick: () => this.#replaceFormToPoint(editComponent, pointComponent)
     });
 
     replace(editComponent, pointComponent);
 
     const onEscDown = (evt) => {
       if(evt.key === 'Escape'){
-        this.replaceFormToPoint(editComponent, pointComponent);
+        this.#replaceFormToPoint(editComponent, pointComponent);
         document.removeEventListener('keydown', onEscDown);
       }
     };
@@ -36,10 +36,10 @@ export default class RoutePresenter {
     document.addEventListener('keydown', onEscDown);
   }
 
-  renderPoint(point){
+  #renderPoint(point){
     const pointComponent = new PointView({
       point,
-      onClick: () => this.replacePointToForm(pointComponent)
+      onClick: () => this.#replacePointToForm(pointComponent)
     });
 
     render(pointComponent, this.listComponent.element);
@@ -50,6 +50,6 @@ export default class RoutePresenter {
     render(new SortView(), this.listContainer);
     render(this.listComponent, this.listContainer);
 
-    this.wayPoints.forEach((point) => this.renderPoint(point));
+    this.wayPoints.forEach((point) => this.#renderPoint(point));
   }
 }
