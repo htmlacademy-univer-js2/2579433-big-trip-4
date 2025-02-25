@@ -1,12 +1,11 @@
-import { createElement } from '../render';
 import { humanizeDate, humanizeDuration } from '../utils';
 import { FORMATS } from '../consts';
 import { offerArray } from '../mock/offer';
 import { destinations } from '../mock/destination';
+import AbstractView from '../framework/view/abstract-view';
 
 function createPointTemplate(point) {
-  const { basePrice, dateFrom, dateTo, destination, isFavorite, offers, type } = point.point;
-
+  const { basePrice, dateFrom, dateTo, destination, isFavorite, offers, type } = point;
   const filteredOffers = offerArray.find((o) => o.type === type);
   const offerList = filteredOffers.offers.map((offer) =>
     offers.includes(offer.id) ?
@@ -54,23 +53,15 @@ function createPointTemplate(point) {
   );
 }
 
-export default class PointView {
-  constructor(point) {
+export default class PointView extends AbstractView{
+  constructor({point, onClick}) {
+    super();
     this.point = point;
+    this.onClick = onClick;
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.onClick);
   }
 
-  getTemplate() {
+  get template() {
     return createPointTemplate(this.point);
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
   }
 }
