@@ -51,10 +51,9 @@ export default class RoutePresenter {
     if(this.wayPoints.length > 0){
       render(new SortView(), this.listContainer);
       render(this.listComponent, this.listContainer);
+      this.wayPoints.forEach((point) => this.#renderPoint(point));
     }else{
       render(new EmptyListView(), this.listContainer);
     }
-
-    this.wayPoints.forEach((point) => this.#renderPoint(point));
   }
 }
