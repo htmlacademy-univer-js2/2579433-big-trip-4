@@ -2,6 +2,7 @@ import PointListView from '../view/point-list-view.js';
 import PointView from '../view/point-view.js';
 import PointEditView from '../view/point-edit-view.js';
 import SortView from '../view/sort-view.js';
+import EmptyListView from '../view/empty-list-view.js';
 import {render, replace} from '../framework/render.js';
 
 export default class RoutePresenter {
@@ -47,9 +48,12 @@ export default class RoutePresenter {
 
   init() {
     this.wayPoints = [...this.pointModel.getPoints()];
-    render(new SortView(), this.listContainer);
-    render(this.listComponent, this.listContainer);
-
-    this.wayPoints.forEach((point) => this.#renderPoint(point));
+    if(this.wayPoints.length > 0){
+      render(new SortView(), this.listContainer);
+      render(this.listComponent, this.listContainer);
+      this.wayPoints.forEach((point) => this.#renderPoint(point));
+    }else{
+      render(new EmptyListView(), this.listContainer);
+    }
   }
 }
