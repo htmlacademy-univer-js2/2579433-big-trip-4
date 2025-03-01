@@ -35,4 +35,8 @@ function humanizeDuration(start, end){
   return formatted.join(' ');
 }
 
-export {getRandomArrayElement, getRandomInt, getRandomDate, humanizeDate, humanizeDuration};
+function updateItem(items, update) {
+  return items.map((item) => item.id === update.id ? update : item);
+}
+
+export {getRandomArrayElement, getRandomInt, getRandomDate, humanizeDate, humanizeDuration, updateItem};
