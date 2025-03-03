@@ -25,16 +25,12 @@ export default class SortView extends AbstractView{
     super();
     this.#sortType = sortType;
     this.#onSortTypeChange = onSortTypeChange;
-    this.element.addEventListener('click', this.#handleSortTypeChange);
+    this.element.querySelector(`.trip-sort__item--${SORT_TYPES[0]}`).addEventListener('click', this.#handleSortTypeChange);
+    this.element.querySelector(`.trip-sort__item--${SORT_TYPES[2]}`).addEventListener('click', this.#handleSortTypeChange);
+    this.element.querySelector(`.trip-sort__item--${SORT_TYPES[3]}`).addEventListener('click', this.#handleSortTypeChange);
   }
 
-  #handleSortTypeChange = (evt) => {
-    if (evt.target.tagName !== 'LABEL') {
-      return;
-    }
-
-    this.#onSortTypeChange(evt.target.dataset.sortType);
-  };
+  #handleSortTypeChange = (evt) => this.#onSortTypeChange(evt.target.dataset.sortType);
 
   get template() {
     return createSortTemplate(this.#sortType);
