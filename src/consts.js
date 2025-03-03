@@ -14,4 +14,6 @@ const FORMATS = {
   timeOnly: 'HH:mm'
 };
 
-export {TYPES, CITIES, OFFERS, SENTENSES, STUB, FORMATS};
+const SORT_TYPES = ['day', 'event', 'time', 'price', 'offers'];
+
+export {TYPES, CITIES, OFFERS, SENTENSES, STUB, FORMATS, SORT_TYPES};
