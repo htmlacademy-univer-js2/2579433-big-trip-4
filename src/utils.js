@@ -35,8 +35,24 @@ function humanizeDuration(start, end){
   return formatted.join(' ');
 }
 
+function capitalizeFirstLetter(string) {
+  return string.replace(/^./, string[0].toUpperCase());
+}
+
 function updateItem(items, update) {
   return items.map((item) => item.id === update.id ? update : item);
 }
 
-export {getRandomArrayElement, getRandomInt, getRandomDate, humanizeDate, humanizeDuration, updateItem};
+function sortByDay(pointA, pointB){
+  return dayjs(pointB.dateFrom).diff(dayjs(pointA.dateFrom));
+}
+
+function sortByPrice(pointA, pointB){
+  return pointB.basePrice - pointA.basePrice;
+}
+
+function sortByDuration(pointA, pointB){
+  return dayjs(pointB.dateTo).diff(dayjs(pointB.dateFrom)) - dayjs(pointA.dateTo).diff(dayjs(pointA.dateFrom));
+}
+
+export {getRandomArrayElement, getRandomInt, getRandomDate, humanizeDate, humanizeDuration, updateItem, capitalizeFirstLetter, sortByDay, sortByPrice, sortByDuration};
