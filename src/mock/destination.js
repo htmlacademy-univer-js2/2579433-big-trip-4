@@ -19,7 +19,7 @@ function getPictures(count){
 
 function getDestination(){
   return CITIES.map((city, index) => ({
-    id: index,
+    id: index.toString(),
     description: getRandomText(getRandomInt(SENTENSES.length)),
     name: city,
     pictures: [{
