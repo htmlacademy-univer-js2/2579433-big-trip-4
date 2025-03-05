@@ -196,7 +196,7 @@ export default class PointEditView extends AbstractStatefulView{
 
   #handleOffersChange = (evt) => {
     evt.preventDefault();
-    const offerId = evt.target.dataset.offerId;
+    const offerId = parseInt(evt.target.dataset.offerId, 10);
     this.updateElement({
       offers: this._state.offers.includes(offerId)
         ? this._state.offers.filter((id) => id !== offerId)
