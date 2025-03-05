@@ -4,6 +4,9 @@ import { offerArray } from '../mock/offer.js';
 import { destinations } from '../mock/destination.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import dayjs from 'dayjs';
+import flatpickr from 'flatpickr';
+
+import 'flatpickr/dist/flatpickr.min.css';
 
 
 function createPointEditTemplate(point) {
@@ -99,6 +102,7 @@ function createPointEditTemplate(point) {
 
 
 export default class PointEditView extends AbstractStatefulView{
+  #datepicker = null;
   #onSubmit = null;
   #onCloseClick = null;
 
@@ -119,14 +123,47 @@ export default class PointEditView extends AbstractStatefulView{
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#handleClick);
     this.element.querySelector('form').addEventListener('submit', this.#handleSubmit);
     this.element.querySelector('.event__type-group').addEventListener('change', this.#handleTypeChange);
-    this.element.querySelector('.event__input--destination').addEventListener('input', this.#handleDestinationChange);
-    this.element.querySelector('.event__input--price').addEventListener('input', this.#handlePriceChange);
+    this.element.querySelector('.event__input--destination').addEventListener('change', this.#handleDestinationChange);
+    this.element.querySelector('.event__input--price').addEventListener('change', this.#handlePriceChange);
     this.element.querySelector('.event__available-offers').addEventListener('change', this.#handleOffersChange);
+    this.#setFromDatepicker();
+    this.#setToDatepicker();
   }
 
   reset(point) {
     this.updateElement(
       PointEditView.parseTaskToState(point),
+    );
+  }
+
+  removeElement() {
+    super.removeElement();
+
+    if (this.#datepicker) {
+      this.#datepicker.destroy();
+      this.#datepicker = null;
+    }
+  }
+
+  #setFromDatepicker() {
+    this.#datepicker = flatpickr(
+      this.element.querySelector('#event-start-time-1'),
+      {
+        dateFormat: 'j F',
+        defaultDate: this._state.dueDate,
+        onChange: this.#handleFromDateChange,
+      },
+    );
+  }
+
+  #setToDatepicker() {
+    this.#datepicker = flatpickr(
+      this.element.querySelector('#event-end-time-1'),
+      {
+        dateFormat: 'j F',
+        defaultDate: this._state.dueDate,
+        onChange: this.#handleFromDateChange,
+      },
     );
   }
 
@@ -171,6 +208,18 @@ export default class PointEditView extends AbstractStatefulView{
       offers: this._state.offers.includes(offerId)
         ? this._state.offers.filter((id) => id !== offerId)
         : [...this._state.offers, offerId]
+    });
+  };
+
+  #handleFromDateChange = ([userDate]) => {
+    this.updateElement({
+      dateFrom: userDate,
+    });
+  };
+
+  #handleToDateChange = ([userDate]) => {
+    this.updateElement({
+      dateTo: userDate,
     });
   };
 
