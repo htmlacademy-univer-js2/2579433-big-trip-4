@@ -5,7 +5,7 @@ function getOffers(){
   return TYPES.map((type) => ({
     type: type,
     offers: OFFERS.map((title, index) => ({
-      id: index,
+      id: index.toString(),
       title: title,
       price: getRandomInt(1000)
     }))
