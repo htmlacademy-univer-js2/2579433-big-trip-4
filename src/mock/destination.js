@@ -12,7 +12,7 @@ function getRandomText(count){
 function getPictures(count){
   const photos = [];
   for(let i = 0; i < count; i++){
-    photos.push(STUB + getRandomInt(10000));
+    photos.push({src: STUB + getRandomInt(10000), description: getRandomArrayElement(SENTENSES)});
   }
   return photos;
 }
@@ -22,10 +22,7 @@ function getDestination(){
     id: index.toString(),
     description: getRandomText(getRandomInt(SENTENSES.length)),
     name: city,
-    pictures: [{
-      src: getPictures(getRandomInt(10)),
-      description: getRandomArrayElement(SENTENSES)
-    }]
+    pictures: getPictures(getRandomInt(10))
   }));
 }
 
