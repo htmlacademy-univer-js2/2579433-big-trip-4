@@ -14,6 +14,31 @@ const FORMATS = {
   timeOnly: 'HH:mm'
 };
 
-const SORT_TYPES = ['day', 'event', 'time', 'price', 'offers'];
+const SORT_TYPES = {
+  DAY: 'day',
+  EVENT: 'event',
+  TIME: 'time',
+  PRICE: 'price',
+  OFFERS: 'offers'
+};
 
-export {TYPES, CITIES, OFFERS, SENTENSES, STUB, FORMATS, SORT_TYPES};
+const FILTER_TYPES = {
+  EVERYTHING: 'everything',
+  FUTURE: 'future',
+  PRESENT: 'present',
+  PAST: 'past'
+};
+
+const ACTIONS = {
+  UPDATE: 'UPDATE',
+  ADD: 'ADD',
+  DELETE: 'DELETE',
+};
+
+const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+};
+
+export {TYPES, CITIES, OFFERS, SENTENSES, STUB, FORMATS, SORT_TYPES, ACTIONS, UpdateType, FILTER_TYPES};
