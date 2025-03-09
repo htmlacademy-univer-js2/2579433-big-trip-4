@@ -57,7 +57,7 @@ function sortByDuration(pointA, pointB){
 }
 
 const filterCount = {
-  [FILTER_TYPES.EVERYTHING]: (points) => points.filter((point) => point),
+  [FILTER_TYPES.EVERYTHING]: (points) => points,
   [FILTER_TYPES.FUTURE]: (points) => points.filter((point) => dayjs(point.dateFrom) > Date.now()),
   [FILTER_TYPES.PRESENT]: (points) => points.filter((point) => dayjs(point.dateFrom) < Date.now() && dayjs(point.dateTo) > Date.now()),
   [FILTER_TYPES.PAST]: (points) => points.filter((point) => dayjs(point.dateTo) < Date.now()),

@@ -27,7 +27,7 @@ export default class RoutePresenter {
     this.#filterModel.addObserver(this.#handleModelEvent);
 
     this.#newPointPresenter = new NewPointPresenter({
-      listComponent: this.#listContainer,
+      listComponent: this.#listComponent.element,
       onChangeClick: this.#handleViewAction,
       onDestroy: onNewPointDestroy
     });
@@ -67,6 +67,7 @@ export default class RoutePresenter {
   #renderPointList(){
     if(this.points.length > 0){
       this.#sortComponent = new SortView({ sortType: this.#currentSortType, onSortTypeChange: this.#handleSortTypeChange });
+      this.#newPointPresenter.listComponent = this.#listComponent.element;
       render(this.#sortComponent, this.#listContainer);
       render(this.#listComponent, this.#listContainer);
       this.points.forEach((point) => {
@@ -87,12 +88,12 @@ export default class RoutePresenter {
   #clearListView() {
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
     this.#pointPresenters.clear();
+    this.#newPointPresenter.destroy();
     remove(this.#sortComponent);
     remove(this.#listComponent);
     if(this.#stubComponent){
       remove(this.#stubComponent);
     }
-    this.#newPointPresenter.destroy();
   }
 
   #handleViewAction = (actionType, updateType, update) => {

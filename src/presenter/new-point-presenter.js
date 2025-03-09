@@ -24,8 +24,17 @@ export default class NewPointPresenter {
 
     remove(this.#newPointComponent);
     this.#newPointComponent = null;
+    this.#listComponent = null;
 
     document.removeEventListener('keydown', this.#escKeyDownHandler);
+  }
+
+  set listComponent(newComponent){
+    this.#listComponent = newComponent;
+  }
+
+  get listComponent(){
+    return this.#listComponent;
   }
 
   init() {
