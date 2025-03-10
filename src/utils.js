@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import { FILTER_TYPES } from './consts';
 
 function getRandomArrayElement(items) {
   return items[Math.floor(Math.random() * items.length)];
@@ -35,12 +36,12 @@ function humanizeDuration(start, end){
   return formatted.join(' ');
 }
 
-function capitalizeFirstLetter(string) {
-  return string.replace(/^./, string[0].toUpperCase());
+function isDatesEqual(dateA, dateB) {
+  return dayjs(dateA).isSame(dateB, 'D');
 }
 
-function updateItem(items, update) {
-  return items.map((item) => item.id === update.id ? update : item);
+function capitalizeFirstLetter(string) {
+  return string.replace(/^./, string[0].toUpperCase());
 }
 
 function sortByDay(pointA, pointB){
@@ -55,4 +56,11 @@ function sortByDuration(pointA, pointB){
   return dayjs(pointB.dateTo).diff(dayjs(pointB.dateFrom)) - dayjs(pointA.dateTo).diff(dayjs(pointA.dateFrom));
 }
 
-export {getRandomArrayElement, getRandomInt, getRandomDate, humanizeDate, humanizeDuration, updateItem, capitalizeFirstLetter, sortByDay, sortByPrice, sortByDuration};
+const filterCount = {
+  [FILTER_TYPES.EVERYTHING]: (points) => points,
+  [FILTER_TYPES.FUTURE]: (points) => points.filter((point) => dayjs(point.dateFrom) > Date.now()),
+  [FILTER_TYPES.PRESENT]: (points) => points.filter((point) => dayjs(point.dateFrom) < Date.now() && dayjs(point.dateTo) > Date.now()),
+  [FILTER_TYPES.PAST]: (points) => points.filter((point) => dayjs(point.dateTo) < Date.now()),
+};
+
+export {getRandomArrayElement, getRandomInt, getRandomDate, humanizeDate, humanizeDuration, isDatesEqual, capitalizeFirstLetter, sortByDay, sortByPrice, sortByDuration, filterCount};

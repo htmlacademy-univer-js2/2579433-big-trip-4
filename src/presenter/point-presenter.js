@@ -1,6 +1,8 @@
 import PointView from '../view/point-view.js';
 import PointEditView from '../view/point-edit-view.js';
 import {render, replace, remove} from '../framework/render.js';
+import { ACTIONS, UpdateType } from '../consts.js';
+import { isDatesEqual } from '../utils.js';
 
 export default class PointPresenter {
   #listComponent = null;
@@ -56,7 +58,8 @@ export default class PointPresenter {
     this.#pointEditComponent = new PointEditView({
       point: this.#point,
       onCloseClick: this.#handleFormToPoint,
-      onSubmit: this.#handleFormSubmit
+      onSubmit: this.#handleFormSubmit,
+      onDelete: this.#handleDeletePoint
     });
 
     if(prevPointComponent === null || prevPointEditComponent === null){
@@ -77,13 +80,16 @@ export default class PointPresenter {
   #handlePointToForm = () => this.#replacePointToForm(this.#pointComponent);
 
   #handleFavoriteClick = () => {
-    this.#handleDataChange({...this.#point, isFavorite: !this.#point.isFavorite});
+    this.#handleDataChange(ACTIONS.UPDATE, UpdateType.MINOR, {...this.#point, isFavorite: !this.#point.isFavorite});
   };
 
   #handleFormToPoint = () => this.#replaceFormToPoint();
 
   #handleFormSubmit = (point) => {
-    this.#handleDataChange(point);
+    const isMinor = this.#point.basePrice === point.basePrice || isDatesEqual(this.#point.dateFrom, point.dateFrom)
+    || isDatesEqual(this.#point.dateTo, point.dateTo);
+
+    this.#handleDataChange(ACTIONS.UPDATE, isMinor ? UpdateType.MINOR : UpdateType.PATCH, point);
     this.#replaceFormToPoint();
   };
 
@@ -93,5 +99,9 @@ export default class PointPresenter {
       this.#pointEditComponent.reset(this.#point);
       this.#replaceFormToPoint();
     }
+  };
+
+  #handleDeletePoint = (point) => {
+    this.#handleDataChange(ACTIONS.DELETE, UpdateType.MINOR, point);
   };
 }
