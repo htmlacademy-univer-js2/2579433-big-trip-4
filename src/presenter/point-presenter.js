@@ -7,6 +7,8 @@ import { isDatesEqual } from '../utils.js';
 export default class PointPresenter {
   #listComponent = null;
   #point = null;
+  #destinations = null;
+  #offers = null;
   #pointComponent = null;
   #pointEditComponent = null;
   #handleDataChange = null;
@@ -44,19 +46,25 @@ export default class PointPresenter {
     }
   }
 
-  init(point){
+  init(point, destinations, offers){
     this.#point = point;
+    this.#destinations = destinations;
+    this.#offers = offers;
     const prevPointComponent = this.#pointComponent;
     const prevPointEditComponent = this.#pointEditComponent;
 
     this.#pointComponent = new PointView({
       point: this.#point,
+      destinations: this.#destinations,
+      offerArray: this.#offers,
       onRollupClick: this.#handlePointToForm,
       onFavoriteClick: this.#handleFavoriteClick
     });
 
     this.#pointEditComponent = new PointEditView({
       point: this.#point,
+      destinations: this.#destinations,
+      offerArray: this.#offers,
       onCloseClick: this.#handleFormToPoint,
       onSubmit: this.#handleFormSubmit,
       onDelete: this.#handleDeletePoint

@@ -37,12 +37,14 @@ export default class NewPointPresenter {
     return this.#listComponent;
   }
 
-  init() {
+  init(destinations, offerArray) {
     if (this.#newPointComponent !== null) {
       return;
     }
 
     this.#newPointComponent = new PointCreationView({
+      destinations,
+      offerArray,
       onSubmit: this.#handleFormSubmit,
       onDelete: this.#handleDeleteClick
     });

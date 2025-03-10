@@ -2,8 +2,6 @@ import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import { TYPES, FORMATS } from '../consts';
 import { getRandomArrayElement, capitalizeFirstLetter, humanizeDate } from '../utils';
 import dayjs from 'dayjs';
-import { destinations } from '../mock/destination';
-import { offerArray } from '../mock/offer';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
@@ -12,16 +10,16 @@ const blankPoint = {
   basePrice: 0,
   dateFrom: new Date(),
   dateTo: new Date(),
-  destination: [],
+  destination: '',
   isFavorite: false,
   offers: [],
   type: getRandomArrayElement(TYPES)
 };
 
-function createPointCreationTemplate(point) {
+function createPointCreationTemplate(point, destinations, offerArray) {
   const { basePrice, dateFrom, dateTo, destination, offers, type } = point;
-  const destinationInfo = destinations.find((d) => d.id === destination[0]);
-  const isSubmitDisabled = dayjs(dateFrom) > dayjs(dateTo) || basePrice < 0 || isNaN(basePrice) || destination.length === 0;
+  const destinationInfo = destinations.find((d) => d.id === destination);
+  const isSubmitDisabled = dayjs(dateFrom) > dayjs(dateTo) || basePrice < 0 || isNaN(basePrice) || destination === '';
 
   const typeList = TYPES.map((eventType) =>
     `<div class="event__type-item">
@@ -115,14 +113,18 @@ function createPointCreationTemplate(point) {
 }
 
 export default class PointCreationView extends AbstractStatefulView{
+  #destinations = null;
+  #offerArray = null;
   #fromDatepicker = null;
   #toDatepicker = null;
   #onSubmit = null;
   #onDelete = null;
 
-  constructor({ onSubmit, onDelete }) {
+  constructor({ destinations, offerArray, onSubmit, onDelete }) {
     super();
     this._setState({...blankPoint});
+    this.#destinations = destinations;
+    this.#offerArray = offerArray;
     this.#onSubmit = onSubmit;
     this.#onDelete = onDelete;
 
@@ -140,7 +142,7 @@ export default class PointCreationView extends AbstractStatefulView{
   }
 
   get template() {
-    return createPointCreationTemplate(this._state);
+    return createPointCreationTemplate(this._state, this.#destinations, this.#offerArray);
   }
 
   removeElement() {
@@ -185,11 +187,11 @@ export default class PointCreationView extends AbstractStatefulView{
 
   #handleDestinationChange = (evt) => {
     evt.preventDefault();
-    const destination = destinations.find((d) => d.name === evt.target.value);
+    const destination = this.#destinations.find((d) => d.name === evt.target.value);
     if(destination){
-      this.updateElement({destination: [destination.id]});
+      this.updateElement({destination: destination.id});
     }else{
-      this.updateElement({destination: []});
+      this.updateElement({destination: ''});
     }
   };
 

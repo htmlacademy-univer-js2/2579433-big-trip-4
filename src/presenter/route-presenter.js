@@ -1,14 +1,16 @@
 import PointListView from '../view/point-list-view.js';
 import SortView from '../view/sort-view.js';
 import EmptyListView from '../view/empty-list-view.js';
+import LoadingView from '../view/loading-view.js';
 import PointPresenter from './point-presenter.js';
 import NewPointPresenter from './new-point-presenter.js';
-import {render, remove} from '../framework/render.js';
+import {render, remove, RenderPosition} from '../framework/render.js';
 import { sortByDuration, sortByDay, sortByPrice, filterCount } from '../utils.js';
 import { SORT_TYPES, ACTIONS, UpdateType, FILTER_TYPES } from '../consts.js';
 
 export default class RoutePresenter {
   #listComponent = new PointListView();
+  #loadingComponent = new LoadingView();
   #sortComponent = null;
   #stubComponent = null;
   #newPointPresenter = null;
@@ -16,6 +18,7 @@ export default class RoutePresenter {
   #listContainer = null;
   #currentSortType = SORT_TYPES.DAY;
   #currentFilterType = FILTER_TYPES.EVERYTHING;
+  #isLoading = true;
   #pointModel = null;
   #filterModel = null;
 
@@ -52,7 +55,7 @@ export default class RoutePresenter {
   createPoint() {
     this.#currentSortType = SORT_TYPES.DAY;
     this.#filterModel.setFilter(UpdateType.MAJOR, FILTER_TYPES.EVERYTHING);
-    this.#newPointPresenter.init();
+    this.#newPointPresenter.init(this.#pointModel.destinations, this.#pointModel.offers);
   }
 
   updatePoint(updatedPoint){
@@ -65,6 +68,10 @@ export default class RoutePresenter {
   }
 
   #renderPointList(){
+    if (this.#isLoading) {
+      render(this.#loadingComponent, this.#listComponent.element, RenderPosition.AFTERBEGIN);
+      return;
+    }
     if(this.points.length > 0){
       this.#sortComponent = new SortView({ sortType: this.#currentSortType, onSortTypeChange: this.#handleSortTypeChange });
       this.#newPointPresenter.listComponent = this.#listComponent.element;
@@ -76,7 +83,7 @@ export default class RoutePresenter {
           onChangeClick: this.#handleViewAction,
           onViewChange: this.#handleViewChange
         });
-        pointPresenter.init(point);
+        pointPresenter.init(point, this.#pointModel.destinations, this.#pointModel.offers);
         this.#pointPresenters.set(point.id, pointPresenter);
       });
     }else{
@@ -91,6 +98,7 @@ export default class RoutePresenter {
     this.#newPointPresenter.destroy();
     remove(this.#sortComponent);
     remove(this.#listComponent);
+    remove(this.#loadingComponent);
     if(this.#stubComponent){
       remove(this.#stubComponent);
     }
@@ -123,6 +131,11 @@ export default class RoutePresenter {
         this.#clearListView();
         this.#renderPointList();
         this.#currentSortType = SORT_TYPES.DAY;
+        break;
+      case UpdateType.INIT:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
+        this.#renderPointList();
         break;
     }
   };
