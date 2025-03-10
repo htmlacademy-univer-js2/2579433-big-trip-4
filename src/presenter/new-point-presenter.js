@@ -1,6 +1,5 @@
 import {remove, render, RenderPosition} from '../framework/render.js';
 import PointCreationView from '../view/point-create-view.js';
-import {nanoid} from 'nanoid';
 import {ACTIONS, UpdateType} from '../consts.js';
 
 export default class NewPointPresenter {
@@ -29,12 +28,24 @@ export default class NewPointPresenter {
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   }
 
+  setSaving(saving) {
+    this.#newPointComponent.isSaving = saving;
+  }
+
   set listComponent(newComponent){
     this.#listComponent = newComponent;
   }
 
   get listComponent(){
     return this.#listComponent;
+  }
+
+  setAborting() {
+    const resetFormState = () => {
+      this.setSaving(false);
+    };
+
+    this.#newPointComponent.shake(resetFormState);
   }
 
   init(destinations, offerArray) {
@@ -58,9 +69,8 @@ export default class NewPointPresenter {
     this.#handleDataChange(
       ACTIONS.ADD,
       UpdateType.MINOR,
-      {id: nanoid(), ...point},
+      point
     );
-    this.destroy();
   };
 
   #handleDeleteClick = () => {
