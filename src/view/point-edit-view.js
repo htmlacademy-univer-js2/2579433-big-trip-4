@@ -1,18 +1,16 @@
 import { TYPES, FORMATS } from '../consts.js';
 import { humanizeDate, capitalizeFirstLetter } from '../utils.js';
-import { offerArray } from '../mock/offer.js';
-import { destinations } from '../mock/destination.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import dayjs from 'dayjs';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
 
-function createPointEditTemplate(point) {
+function createPointEditTemplate(point, destinations, offerArray) {
   const { basePrice, dateFrom, dateTo, destination, offers, type } = point;
 
-  const destinationInfo = destinations.find((d) => d.id === destination[0]);
-  const isSubmitDisabled = dayjs(dateFrom) > dayjs(dateTo) || basePrice < 0 || isNaN(basePrice) || destination.length === 0;
+  const destinationInfo = destinations.find((d) => d.id === destination);
+  const isSubmitDisabled = dayjs(dateFrom) > dayjs(dateTo) || basePrice < 0 || isNaN(basePrice) || destination === '';
   const typeList = TYPES.map((eventType) =>
     `<div class="event__type-item">
       <input id="event-type-${eventType}-1" class="event__type-input visually-hidden" type="radio" name="event-type" value="${eventType}" ${eventType === type ? 'checked' : ''}>
@@ -103,15 +101,19 @@ function createPointEditTemplate(point) {
 
 
 export default class PointEditView extends AbstractStatefulView{
+  #destinations = null;
+  #offerArray = null;
   #fromDatepicker = null;
   #toDatepicker = null;
   #onSubmit = null;
   #onCloseClick = null;
   #onDelete = null;
 
-  constructor({ point, onCloseClick, onSubmit, onDelete }) {
+  constructor({ point, destinations, offerArray, onCloseClick, onSubmit, onDelete }) {
     super();
     this._setState(PointEditView.parsePointToState(point));
+    this.#destinations = destinations;
+    this.#offerArray = offerArray;
     this.#onSubmit = onSubmit;
     this.#onCloseClick = onCloseClick;
     this.#onDelete = onDelete;
@@ -120,7 +122,7 @@ export default class PointEditView extends AbstractStatefulView{
   }
 
   get template() {
-    return createPointEditTemplate(this._state);
+    return createPointEditTemplate(this._state, this.#destinations, this.#offerArray);
   }
 
   _restoreHandlers(){
@@ -184,11 +186,11 @@ export default class PointEditView extends AbstractStatefulView{
 
   #handleDestinationChange = (evt) => {
     evt.preventDefault();
-    const destination = destinations.find((d) => d.name === evt.target.value);
+    const destination = this.#destinations.find((d) => d.name === evt.target.value);
     if(destination){
-      this.updateElement({destination: [destination.id]});
+      this.updateElement({destination: destination.id});
     }else{
-      this.updateElement({destination: []});
+      this.updateElement({destination: ''});
     }
   };
 

@@ -63,4 +63,13 @@ const filterCount = {
   [FILTER_TYPES.PAST]: (points) => points.filter((point) => dayjs(point.dateTo) < Date.now()),
 };
 
-export {getRandomArrayElement, getRandomInt, getRandomDate, humanizeDate, humanizeDuration, isDatesEqual, capitalizeFirstLetter, sortByDay, sortByPrice, sortByDuration, filterCount};
+function getNonce() {
+  let text = '';
+  const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  for (let i = 0; i < 32; i++) {
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+  return text;
+}
+
+export {getRandomArrayElement, getRandomInt, getRandomDate, humanizeDate, humanizeDuration, isDatesEqual, capitalizeFirstLetter, sortByDay, sortByPrice, sortByDuration, filterCount, getNonce};

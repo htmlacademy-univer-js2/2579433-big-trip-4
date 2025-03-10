@@ -33,6 +33,7 @@ const ACTIONS = {
   UPDATE: 'UPDATE',
   ADD: 'ADD',
   DELETE: 'DELETE',
+  INIT: 'INIT'
 };
 
 const UpdateType = {

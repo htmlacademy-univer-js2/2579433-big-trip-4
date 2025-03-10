@@ -1,10 +1,8 @@
 import { humanizeDate, humanizeDuration } from '../utils';
 import { FORMATS } from '../consts';
-import { offerArray } from '../mock/offer';
-import { destinations } from '../mock/destination';
 import AbstractView from '../framework/view/abstract-view';
 
-function createPointTemplate(point) {
+function createPointTemplate(point, destinations, offerArray) {
   const { basePrice, dateFrom, dateTo, destination, isFavorite, offers, type } = point;
   const filteredOffers = offerArray.find((o) => o.type === type);
   const offerList = filteredOffers.offers.map((offer) =>
@@ -23,7 +21,7 @@ function createPointTemplate(point) {
         <div class="event__type">
           <img class="event__type-icon" width="42" height="42" src="img/icons/${type.toLowerCase()}.png" alt="Event type icon">
         </div>
-        <h3 class="event__title">${type} ${destinations.find((d) => d.id === destination[0]).name}</h3>
+        <h3 class="event__title">${type} ${destinations.find((d) => d.id === destination).name}</h3>
         <div class="event__schedule">
           <p class="event__time">
             <time class="event__start-time" datetime="${dateFrom.toISOString()}">${humanizeDate(dateFrom, FORMATS.timeOnly)}</time>
@@ -55,12 +53,16 @@ function createPointTemplate(point) {
 
 export default class PointView extends AbstractView{
   #point = null;
+  #destinations = null;
+  #offerArray = null;
   #handleRollupClick = null;
   #handleFavoriteClick = null;
 
-  constructor({point, onRollupClick, onFavoriteClick}) {
+  constructor({point, destinations, offerArray, onRollupClick, onFavoriteClick}) {
     super();
     this.#point = point;
+    this.#destinations = destinations;
+    this.#offerArray = offerArray;
     this.#handleRollupClick = onRollupClick;
     this.#handleFavoriteClick = onFavoriteClick;
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#rollupHandler);
@@ -78,6 +80,6 @@ export default class PointView extends AbstractView{
   };
 
   get template() {
-    return createPointTemplate(this.#point);
+    return createPointTemplate(this.#point, this.#destinations, this.#offerArray);
   }
 }
