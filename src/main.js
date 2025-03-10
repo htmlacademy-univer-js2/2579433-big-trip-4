@@ -3,6 +3,7 @@ import FilterPresenter from './presenter/filter-presenter.js';
 import PointsModel from './model/point-model.js';
 import FilterModel from './model/filter-model.js';
 import PointsApiService from './points-api-service.js';
+import { getNonce } from './utils.js';
 
 const AUTHORIZATION = `Basic ${getNonce()}`;
 const END_POINT = 'https://21.objects.htmlacademy.pro/big-trip';
@@ -27,13 +28,4 @@ function handleNewPointFormClose() {
 function handleNewPointButtonClick() {
   routePresenter.createPoint();
   newEventButton.disabled = true;
-}
-
-function getNonce() {
-  let text = '';
-  const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  for (let i = 0; i < 32; i++) {
-    text += possible.charAt(Math.floor(Math.random() * possible.length));
-  }
-  return text;
 }

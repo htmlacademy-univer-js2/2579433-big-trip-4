@@ -69,7 +69,7 @@ export default class RoutePresenter {
 
   #renderPointList(){
     if (this.#isLoading) {
-      render(this.#loadingComponent, this.#listComponent.element, RenderPosition.AFTERBEGIN);
+      render(this.#loadingComponent, this.#listContainer, RenderPosition.AFTERBEGIN);
       return;
     }
     if(this.points.length > 0){
