@@ -10,7 +10,7 @@ function createPointEditTemplate(point, destinations, offerArray, isDisabled, is
   const { basePrice, dateFrom, dateTo, destination, offers, type } = point;
 
   const destinationInfo = destinations.find((d) => d.id === destination);
-  const isSubmitDisabled = dayjs(dateFrom) > dayjs(dateTo) || basePrice <= 0 || isNaN(basePrice) || basePrice === '' || destination === '';
+  const isSubmitDisabled = dayjs(dateFrom) >= dayjs(dateTo) || basePrice <= 0 || isNaN(basePrice) || basePrice === '' || destination === '';
   const typeList = TYPES.map((eventType) =>
     `<div class="event__type-item">
       <input id="event-type-${eventType}-1" class="event__type-input visually-hidden" type="radio" name="event-type" value="${eventType}" ${eventType === type ? 'checked' : ''}>
@@ -157,6 +157,8 @@ export default class PointEditView extends AbstractStatefulView{
     this.#fromDatepicker = flatpickr(
       this.element.querySelector('#event-start-time-1'),
       {
+        enableTime: true,
+        minuteIncrement: 1,
         dateFormat: 'd/m/Y H:i',
         defaultDate: this._state.dateFrom,
         onChange: this.#handleFromDateChange,
@@ -165,6 +167,8 @@ export default class PointEditView extends AbstractStatefulView{
     this.#toDatepicker = flatpickr(
       this.element.querySelector('#event-end-time-1'),
       {
+        enableTime: true,
+        minuteIncrement: 1,
         dateFormat: 'd/m/Y H:i',
         defaultDate: this._state.dateTo,
         onChange: this.#handleToDateChange,

@@ -8,7 +8,7 @@ import 'flatpickr/dist/flatpickr.min.css';
 const blankPoint = {
   basePrice: 1,
   dateFrom: new Date(),
-  dateTo: new Date(),
+  dateTo: new Date(Date.now() + 1000 * 60),
   destination: '',
   isFavorite: false,
   offers: [],
@@ -18,7 +18,7 @@ const blankPoint = {
 function createPointCreationTemplate(point, destinations, offerArray, isSaving) {
   const { basePrice, dateFrom, dateTo, destination, offers, type } = point;
   const destinationInfo = destinations.find((d) => d.id === destination);
-  const isSubmitDisabled = dayjs(dateFrom) > dayjs(dateTo) || basePrice <= 0 || isNaN(basePrice) || basePrice === '' || destination === '';
+  const isSubmitDisabled = dayjs(dateFrom) >= dayjs(dateTo) || basePrice <= 0 || isNaN(basePrice) || basePrice === '' || destination === '';
 
   const typeList = TYPES.map((eventType) =>
     `<div class="event__type-item">
@@ -87,8 +87,8 @@ function createPointCreationTemplate(point, destinations, offerArray, isSaving) 
                   <button class="event__reset-btn" type="reset" ${ isSaving ? 'disabled' : ''}>Cancel</button>
                 </header>
                 <section class="event__details">
-                  <section class="event__section  event__section--offers">
-                    ${offerList ? `<h3 class="event__section-title  event__section-title--offers">Offers</h3>
+                  ${offerList ? `<section class="event__section  event__section--offers">
+                    <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
                     <div class="event__available-offers">
                     ${offerList}
@@ -136,7 +136,7 @@ export default class PointCreationView extends AbstractStatefulView{
     this.element.querySelector('.event__type-group').addEventListener('change', this.#handleTypeChange);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#handleDestinationChange);
     this.element.querySelector('.event__input--price').addEventListener('change', this.#handlePriceChange);
-    this.element.querySelector('.event__available-offers').addEventListener('change', this.#handleOffersChange);
+    this.element.querySelector('.event__available-offers')?.addEventListener('change', this.#handleOffersChange);
     this.element.querySelector('.event__reset-btn').addEventListener('click', this.#handleDeletePoint);
     this.#setDatepicker();
   }
@@ -168,6 +168,8 @@ export default class PointCreationView extends AbstractStatefulView{
     this.#fromDatepicker = flatpickr(
       this.element.querySelector('#event-start-time-1'),
       {
+        enableTime: true,
+        minuteIncrement: 1,
         dateFormat: 'd/m/Y H:i',
         defaultDate: this._state.dateFrom,
         onChange: this.#handleFromDateChange,
@@ -176,6 +178,8 @@ export default class PointCreationView extends AbstractStatefulView{
     this.#toDatepicker = flatpickr(
       this.element.querySelector('#event-end-time-1'),
       {
+        enableTime: true,
+        minuteIncrement: 1,
         dateFormat: 'd/m/Y H:i',
         defaultDate: this._state.dateTo,
         onChange: this.#handleToDateChange,
