@@ -122,9 +122,9 @@ export default class PointCreationView extends AbstractStatefulView{
 
   constructor({ destinations, offerArray, onSubmit, onDelete }) {
     super();
-    this._setState({...blankPoint});
     this.#destinations = destinations;
     this.#offerArray = offerArray;
+    this._setState({...blankPoint, destination: getRandomArrayElement(this.#destinations).id});
     this.#onSubmit = onSubmit;
     this.#onDelete = onDelete;
 
