@@ -6,8 +6,8 @@ import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
 
-function createPointEditTemplate(point, destinations, offerArray, isDisabled, isSaving, isDeleting) {
-  const { basePrice, dateFrom, dateTo, destination, offers, type } = point;
+function createPointEditTemplate(point, destinations, offerArray) {
+  const { basePrice, dateFrom, dateTo, destination, offers, type, isDisabled, isSaving, isDeleting } = point;
 
   const destinationInfo = destinations.find((d) => d.id === destination);
   const isSubmitDisabled = dayjs(dateFrom) >= dayjs(dateTo) || basePrice <= 0 || isNaN(basePrice) || basePrice === '' || destination === '';
