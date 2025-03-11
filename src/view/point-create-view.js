@@ -15,8 +15,8 @@ const blankPoint = {
   type: getRandomArrayElement(TYPES)
 };
 
-function createPointCreationTemplate(point, destinations, offerArray, isSaving) {
-  const { basePrice, dateFrom, dateTo, destination, offers, type } = point;
+function createPointCreationTemplate(point, destinations, offerArray) {
+  const { basePrice, dateFrom, dateTo, destination, offers, type, isSaving } = point;
   const destinationInfo = destinations.find((d) => d.id === destination);
   const isSubmitDisabled = dayjs(dateFrom) >= dayjs(dateTo) || basePrice <= 0 || isNaN(basePrice) || basePrice === '' || destination === '';
 
@@ -114,7 +114,6 @@ function createPointCreationTemplate(point, destinations, offerArray, isSaving) 
 export default class PointCreationView extends AbstractStatefulView{
   #destinations = null;
   #offerArray = null;
-  #isSaving = false;
   #fromDatepicker = null;
   #toDatepicker = null;
   #onSubmit = null;
@@ -124,7 +123,7 @@ export default class PointCreationView extends AbstractStatefulView{
     super();
     this.#destinations = destinations;
     this.#offerArray = offerArray;
-    this._setState({...blankPoint, destination: getRandomArrayElement(this.#destinations).id});
+    this._setState({...blankPoint, destination: getRandomArrayElement(this.#destinations).id, isSaving: false});
     this.#onSubmit = onSubmit;
     this.#onDelete = onDelete;
 
@@ -142,15 +141,7 @@ export default class PointCreationView extends AbstractStatefulView{
   }
 
   get template() {
-    return createPointCreationTemplate(this._state, this.#destinations, this.#offerArray, this.#isSaving);
-  }
-
-  get isSaving(){
-    return this.#isSaving;
-  }
-
-  set isSaving(saving){
-    this.#isSaving = saving;
+    return createPointCreationTemplate(this._state, this.#destinations, this.#offerArray);
   }
 
   removeElement() {
@@ -189,6 +180,7 @@ export default class PointCreationView extends AbstractStatefulView{
 
   #handleSubmit = (evt) => {
     evt.preventDefault();
+    delete this._state.isSaving;
     this.#onSubmit({...this._state});
   };
 

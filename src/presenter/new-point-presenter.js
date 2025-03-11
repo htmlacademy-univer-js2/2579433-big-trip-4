@@ -29,7 +29,9 @@ export default class NewPointPresenter {
   }
 
   setSaving(saving) {
-    this.#newPointComponent.isSaving = saving;
+    this.#newPointComponent.updateElement({
+      isSaving: saving,
+    });
   }
 
   set listComponent(newComponent){
