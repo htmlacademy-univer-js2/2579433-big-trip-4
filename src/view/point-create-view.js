@@ -6,7 +6,7 @@ import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
 const blankPoint = {
-  basePrice: 0,
+  basePrice: 1,
   dateFrom: new Date(),
   dateTo: new Date(),
   destination: '',
@@ -18,7 +18,7 @@ const blankPoint = {
 function createPointCreationTemplate(point, destinations, offerArray, isSaving) {
   const { basePrice, dateFrom, dateTo, destination, offers, type } = point;
   const destinationInfo = destinations.find((d) => d.id === destination);
-  const isSubmitDisabled = dayjs(dateFrom) > dayjs(dateTo) || basePrice < 0 || isNaN(basePrice) || destination === '';
+  const isSubmitDisabled = dayjs(dateFrom) > dayjs(dateTo) || basePrice <= 0 || isNaN(basePrice) || basePrice === '' || destination === '';
 
   const typeList = TYPES.map((eventType) =>
     `<div class="event__type-item">
@@ -35,6 +35,8 @@ function createPointCreationTemplate(point, destinations, offerArray, isSaving) 
         &plus;&euro;&nbsp;<span class="event__offer-price">${offer.price}</span>
         </label>
     </div>`).join('\n');
+
+  const options = destinations.map((d) => `<option value="${d.name}"></option>`).join('\n');
 
   return (
     `<li class="trip-events__item">
@@ -61,9 +63,7 @@ function createPointCreationTemplate(point, destinations, offerArray, isSaving) 
                     </label>
                     <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destinationInfo ? destinationInfo.name : ''}" list="destination-list-1" ${ isSaving ? 'disabled' : ''}>
                     <datalist id="destination-list-1">
-                      <option value="Amsterdam"></option>
-                      <option value="Geneva"></option>
-                      <option value="Chamonix"></option>
+                      ${options}
                     </datalist>
                   </div>
 

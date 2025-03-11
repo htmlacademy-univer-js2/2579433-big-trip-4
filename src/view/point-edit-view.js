@@ -10,7 +10,7 @@ function createPointEditTemplate(point, destinations, offerArray, isDisabled, is
   const { basePrice, dateFrom, dateTo, destination, offers, type } = point;
 
   const destinationInfo = destinations.find((d) => d.id === destination);
-  const isSubmitDisabled = dayjs(dateFrom) > dayjs(dateTo) || basePrice < 0 || isNaN(basePrice) || destination === '';
+  const isSubmitDisabled = dayjs(dateFrom) > dayjs(dateTo) || basePrice <= 0 || isNaN(basePrice) || basePrice === '' || destination === '';
   const typeList = TYPES.map((eventType) =>
     `<div class="event__type-item">
       <input id="event-type-${eventType}-1" class="event__type-input visually-hidden" type="radio" name="event-type" value="${eventType}" ${eventType === type ? 'checked' : ''}>
@@ -25,7 +25,9 @@ function createPointEditTemplate(point, destinations, offerArray, isDisabled, is
       <span class="event__offer-title">${offer.title}</span>
       &plus;&euro;&nbsp;<span class="event__offer-price">${offer.price}</span>
       </label>
-</div>`).join('\n');
+    </div>`).join('\n');
+
+  const options = destinations.map((d) => `<option value="${d.name}"></option>`).join('\n');
 
   return (
     `<li class="trip-events__item">
@@ -52,9 +54,7 @@ function createPointEditTemplate(point, destinations, offerArray, isDisabled, is
                     </label>
                     <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destinationInfo ? destinationInfo.name : ''}" list="destination-list-1" ${ isDisabled ? 'disabled' : '' }>
                     <datalist id="destination-list-1">
-                      <option value="Amsterdam"></option>
-                      <option value="Geneva"></option>
-                      <option value="Chamonix"></option>
+                      ${options}
                     </datalist>
                   </div>
 
@@ -138,7 +138,7 @@ export default class PointEditView extends AbstractStatefulView{
 
   reset(point) {
     this.updateElement(
-      PointEditView.parseTaskToState(point),
+      PointEditView.parsePointToState(point),
     );
   }
 
