@@ -129,12 +129,16 @@ export default class PointPresenter {
 
   #handleFormToPoint = () => this.#replaceFormToPoint();
 
-  #handleFormSubmit = (point) => {
+  #handleFormSubmit = async (point) => {
     const isMinor = this.#point.basePrice === point.basePrice || isDatesEqual(this.#point.dateFrom, point.dateFrom)
     || isDatesEqual(this.#point.dateTo, point.dateTo);
 
-    this.#handleDataChange(ACTIONS.UPDATE, isMinor ? UpdateType.MINOR : UpdateType.PATCH, point);
-    this.#replaceFormToPoint();
+    try{
+      await this.#handleDataChange(ACTIONS.UPDATE, isMinor ? UpdateType.MINOR : UpdateType.PATCH, point);
+      this.#replaceFormToPoint();
+    }catch(err){
+      this.setAborting();
+    }
   };
 
   #handleEscDown = (evt) => {
