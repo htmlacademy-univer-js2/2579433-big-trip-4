@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { FILTER_TYPES } from './consts';
+import { FILTER_TYPES, FORMATS } from './consts';
 
 function getRandomArrayElement(items) {
   return items[Math.floor(Math.random() * items.length)];
@@ -34,6 +34,17 @@ function humanizeDuration(start, end){
   formatted.push(`${String(mins).padStart(2, '0')}M`);
 
   return formatted.join(' ');
+}
+
+function getDuration(start, end){
+  if(dayjs(end).diff(dayjs(start)) < 1000 * 60 * 60 * 24){
+    return humanizeDate(start, FORMATS.shortDate);
+  }
+  if(start.getMonth() === end.getMonth()){
+    return `${humanizeDate(start, FORMATS.shortDate)}&nbsp;&mdash;&nbsp;${humanizeDate(end, FORMATS.day)}`;
+  }else{
+    return `${humanizeDate(start, FORMATS.shortDate)}&nbsp;&mdash;&nbsp;${humanizeDate(end, FORMATS.shortDate)}`;
+  }
 }
 
 function isDatesEqual(dateA, dateB) {
@@ -72,4 +83,4 @@ function getNonce() {
   return text;
 }
 
-export {getRandomArrayElement, getRandomInt, getRandomDate, humanizeDate, humanizeDuration, isDatesEqual, capitalizeFirstLetter, sortByDay, sortByPrice, sortByDuration, filterCount, getNonce};
+export {getRandomArrayElement, getRandomInt, getRandomDate, humanizeDate, humanizeDuration, isDatesEqual, capitalizeFirstLetter, sortByDay, sortByPrice, sortByDuration, filterCount, getNonce, getDuration};

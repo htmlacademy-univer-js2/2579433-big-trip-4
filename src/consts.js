@@ -11,7 +11,8 @@ const STUB = 'https://loremflickr.com/248/152?random=';
 const FORMATS = {
   fullDate: 'DD/MM/YY HH:mm',
   shortDate: 'MMM DD',
-  timeOnly: 'HH:mm'
+  timeOnly: 'HH:mm',
+  day: 'DD'
 };
 
 const SORT_TYPES = {
